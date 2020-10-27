@@ -3,7 +3,8 @@ FROM node:12.13.0-alpine as ship
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
-
+# China mirrors
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 RUN apk --no-cache add curl ca-certificates \
     && addgroup -S app && adduser -S -g app app
 

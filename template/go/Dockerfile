@@ -2,13 +2,15 @@ FROM openfaas/classic-watchdog:0.18.18 as watchdog
 FROM golang:1.13-alpine3.12 as builder
 
 # Required to enable Go modules
+# China mirrors
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 RUN apk add --no-cache git
 
 # Allows you to add additional packages via build-arg
 ARG ADDITIONAL_PACKAGE
 ARG CGO_ENABLED=0
-ARG GO111MODULE="off"
-ARG GOPROXY=""
+ARG GO111MODULE="on"
+ARG GOPROXY="https://goproxy.cn,direct"
 ARG GOFLAGS=""
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
@@ -35,6 +37,7 @@ RUN CGO_ENABLED=${CGO_ENABLED} GOOS=linux \
     go build --ldflags "-s -w" -a -installsuffix cgo -o handler .
 
 FROM alpine:3.12
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 RUN apk --no-cache add ca-certificates \
     && addgroup -S app && adduser -S -g app app \
     && mkdir -p /home/app \

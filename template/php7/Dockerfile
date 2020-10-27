@@ -5,7 +5,8 @@ FROM composer:1.7 AS composer
 
 # continue with the official PHP image
 FROM php:7.2-alpine
-
+# China mirrors
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 # copy the Composer PHAR from the Composer image into the PHP image
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 

@@ -1,7 +1,8 @@
 FROM openfaas/classic-watchdog:0.18.18 as watchdog
 
 FROM python:3-alpine
-
+# China mirrors
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 # Allows you to add additional packages via build-arg
 ARG ADDITIONAL_PACKAGE
 
@@ -32,7 +33,7 @@ RUN touch ./function/__init__.py
 WORKDIR /home/app/function/
 COPY function/requirements.txt	.
 
-RUN pip install -r requirements.txt --target=/home/app/python
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt --target=/home/app/python
 
 WORKDIR /home/app/
 

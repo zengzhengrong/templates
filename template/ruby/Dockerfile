@@ -4,7 +4,8 @@ FROM ruby:2.7-alpine3.11
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
-
+# China mirrors
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 ARG ADDITIONAL_PACKAGE
 
 # Alternatively use ADD https:// (which will not be cached by Docker builder)

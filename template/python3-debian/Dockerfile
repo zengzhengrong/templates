@@ -1,6 +1,7 @@
 FROM openfaas/classic-watchdog:0.18.18 as watchdog
 FROM python:3
-
+# China mirrors
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 # Allows you to add additional packages via build-arg
 ARG ADDITIONAL_PACKAGE
 
